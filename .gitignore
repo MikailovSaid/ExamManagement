@@ -1,0 +1,68 @@
+## Build output
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio
+.vscode/
+.vs/
+
+## ASP.NET Core secrets
+**/appsettings.Development.json
+**/appsettings.Local.json
+secrets.json
+
+## Logs
+*.log
+logs/
+
+## Oracle related
+*.dmp
+*.log
+*.sql~
+*.tmp
+
+## Environment files
+.env
+*.env.*
+
+## IDE files
+*.sublime-project
+*.sublime-workspace
+
+## Rider
+.idea/
+*.sln.iml
+
+## Mac / Linux
+.DS_Store
+*.swp
+*.bak
+
+## NuGet
+*.nupkg
+packages/
+project.lock.json
+
+## Backup files
+*.bak
+*.old
+*.orig
+*.tmp
+
+## Publish folders
+publish/
+wwwroot/dist/
+wwwroot/lib/
+node_modules/
+bower_components/
+
+## PDF/Excel report outputs (optional if generated on server)
+Reports/*.pdf
+Reports/*.xlsx

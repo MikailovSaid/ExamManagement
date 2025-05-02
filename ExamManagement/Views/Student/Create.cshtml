@@ -1,0 +1,10 @@
+﻿@model Student
+
+<h2>Create Student</h2>
+<form asp-action="Create" method="post">
+    <input class="form-control mt-2" asp-for="FirstName" placeholder="First Name" />
+    <input class="form-control mt-2" asp-for="LastName" placeholder="Last Name" />
+    <input class="form-control mt-2" asp-for="ClassLevel" placeholder="Class Level" />
+    <button class="btn btn-primary btn-sm mt-2" type="submit">Create</button>
+    <a class="btn btn-secondary btn-sm mt-2" asp-action="Index">Cancel</a>
+</form>
