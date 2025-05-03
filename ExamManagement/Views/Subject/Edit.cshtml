@@ -1,0 +1,22 @@
+﻿@model Subject
+
+<h2>Edit Subject</h2>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="SubjectCode" />
+    <input class="form-control mt-2" asp-for="SubjectName" placeholder="Subject Name" />
+    <span class="text-danger" asp-validation-for="SubjectName"></span>
+
+    <input class="form-control mt-2" asp-for="ClassLevel" placeholder="Class Level" />
+    <span class="text-danger" asp-validation-for="ClassLevel"></span>
+
+    <input class="form-control mt-2" asp-for="TeacherFirstName" placeholder="Teacher Firstname" />
+    <span class="text-danger" asp-validation-for="TeacherFirstName"></span>
+
+    <input class="form-control mt-2" asp-for="TeacherLastName" placeholder="Teacher Lastname" />
+    <span class="text-danger" asp-validation-for="TeacherLastName"></span>
+
+    <div>
+        <button class="btn btn-primary btn-sm mt-2" type="submit">Save</button>
+        <a class="btn btn-secondary btn-sm mt-2" asp-action="Index">Cancel</a>
+    </div>
+</form>

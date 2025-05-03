@@ -1,8 +1,11 @@
-﻿namespace ExamManagement.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ExamManagement.Entities
 {
     public class ExamStatistics
     {
         public int StatId { get; set; }
+        [MaxLength(20)]
         public string SubjectCode { get; set; } = null!;
         public int ClassLevel { get; set; }
         public double AverageGrade { get; set; }

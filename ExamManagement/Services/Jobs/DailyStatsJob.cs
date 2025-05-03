@@ -19,10 +19,10 @@ namespace ExamManagement.Services.Jobs
             while (!stoppingToken.IsCancellationRequested)
             {
                 var now = DateTime.Now;
-                var nextRun = now.Date.AddDays(1); // Gələn gecə 00:00
+                var nextRun = now.Date.AddDays(1);
                 var delay = nextRun - now;
 
-                _logger.LogInformation($"DailyStatsJob sleeping for {delay.TotalMinutes} minutes...");
+                _logger.LogInformation($"DailyStatsJob will start after {delay}");
                 await Task.Delay(delay, stoppingToken);
 
                 await RunJobAsync();

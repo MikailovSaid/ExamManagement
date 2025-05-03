@@ -1,0 +1,9 @@
+﻿@model Subject
+
+<h2>Are you sure to delete?</h2>
+<p>@Model.SubjectCode: @Model.SubjectName</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="SubjectCode" name="code" />
+    <button class="btn btn-primary btn-sm mt-2" type="submit">Delete</button>
+    <a class="btn btn-secondary btn-sm mt-2" asp-action="Index">Cancel</a>
+</form>

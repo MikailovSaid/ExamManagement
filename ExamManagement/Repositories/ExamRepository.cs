@@ -68,10 +68,5 @@ namespace ExamManagement.Repositories
             using IDbConnection db = _connectionFactory.CreateConnection();
             await db.ExecuteAsync("DELETE FROM Exams WHERE ExamId = :Id", new { Id = id });
         }
-
-        public async Task<IEnumerable<Exam>> FindAsync(System.Linq.Expressions.Expression<Func<Exam, bool>> predicate)
-        {
-            throw new NotImplementedException("Predicate-based query is not supported with Dapper.");
-        }
     }
 }

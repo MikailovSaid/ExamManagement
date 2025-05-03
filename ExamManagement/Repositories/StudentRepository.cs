@@ -3,6 +3,8 @@ using ExamManagement.Interfaces;
 using Dapper;
 using ExamManagement.Data;
 using System.Data;
+using Oracle.ManagedDataAccess.Client;
+using ExamManagement.Helpers;
 
 namespace ExamManagement.Repositories
 {
@@ -18,16 +20,32 @@ namespace ExamManagement.Repositories
         public async Task<IEnumerable<Student>> GetAllAsync()
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            var data = await db.QueryAsync<Student>("SELECT * FROM Students");
-            return data;
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_Result", dbType: OracleDbType.RefCursor, direction: ParameterDirection.Output);
+
+            var result = await db.QueryAsync<Student>(
+                "CRUD_STUDENTS.GetAllStudents",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
+
+            return result;
         }
 
         public async Task<Student?> GetByIdAsync(object id)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            return await db.QueryFirstOrDefaultAsync<Student>(
-                "SELECT * FROM Students WHERE StudentId = :Id",
-                new { Id = id });
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_StudentId", id, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_Result", dbType: OracleDbType.RefCursor, direction: ParameterDirection.Output);
+
+            var result = await db.QueryAsync<Student>(
+                "CRUD_STUDENTS.GetStudentById",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
+
+            return result.FirstOrDefault();
         }
 
         public async Task<IEnumerable<Student>> GetByClassLevelAsync(int classLevel)
@@ -41,33 +59,46 @@ namespace ExamManagement.Repositories
         public async Task AddAsync(Student student)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            string sql = @"
-                INSERT INTO Students (FirstName, LastName, ClassLevel)
-                VALUES (:FirstName, :LastName, :ClassLevel)";
-            await db.ExecuteAsync(sql, student);
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_FirstName", student.FirstName, OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_LastName", student.LastName, OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_ClassLevel", student.ClassLevel, OracleDbType.Int32, ParameterDirection.Input);
+
+            await db.ExecuteAsync(
+                "CRUD_STUDENTS.InsertStudent",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
         }
 
         public async Task UpdateAsync(Student student)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            string sql = @"
-                UPDATE Students
-                SET FirstName = :FirstName,
-                    LastName = :LastName,
-                    ClassLevel = :ClassLevel
-                WHERE StudentId = :StudentId";
-            await db.ExecuteAsync(sql, student);
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_StudentId", student.StudentId, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_FirstName", student.FirstName, OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_LastName", student.LastName, OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_ClassLevel", student.ClassLevel, OracleDbType.Int32, ParameterDirection.Input);
+
+            await db.ExecuteAsync(
+                "CRUD_STUDENTS.UpdateStudent",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
         }
 
         public async Task DeleteAsync(object id)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            await db.ExecuteAsync("DELETE FROM Students WHERE StudentId = :Id", new { Id = id });
-        }
 
-        public async Task<IEnumerable<Student>> FindAsync(System.Linq.Expressions.Expression<Func<Student, bool>> predicate)
-        {
-            throw new NotImplementedException("Predicate-based query is not supported with Dapper.");
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_StudentId", id, OracleDbType.Int32, ParameterDirection.Input);
+
+            await db.ExecuteAsync(
+                "CRUD_STUDENTS.DeleteStudent",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
         }
     }
+
 }

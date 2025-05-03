@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Subject>
+@{
+    int index = 1;
+}
+<div class="d-flex justify-content-between">
+    <h4>Subjects</h4>
+    <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Subject Code</th>
+            <th scope="col">Subject Name</th>
+            <th scope="col">Class level</th>
+            <th scope="col">Teacher name</th>
+            <th scope="col">Teacher surname</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@item.SubjectCode</td>
+                <td>@item.SubjectName</td>
+                <td>@item.ClassLevel</td>
+                <td>@item.TeacherFirstName</td>
+                <td>@item.TeacherLastName</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-code="@item.SubjectCode">Edit</a> |
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-code="@item.SubjectCode">Delete</a>
+                </td>
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>

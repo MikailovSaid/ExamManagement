@@ -6,7 +6,6 @@ namespace ExamManagement.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T?> GetByIdAsync(object id);
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
 
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
