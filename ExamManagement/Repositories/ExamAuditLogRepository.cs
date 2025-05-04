@@ -15,6 +15,14 @@ namespace ExamManagement.Repositories
             _connectionFactory = connectionFactory;
         }
 
+        public async Task<IEnumerable<ExamAuditLog>> GetAllAsync(int? examId)
+        {
+            using IDbConnection db = _connectionFactory.CreateConnection();
+            var checkId = examId != null ? $"where ExamId = {examId}" : "";
+            string sql = $"SELECT * FROM ExamAuditLog {checkId} order by LogId desc";
+            return await db.QueryAsync<ExamAuditLog>(sql);
+        }
+
         public async Task AddAsync(ExamAuditLog log)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();

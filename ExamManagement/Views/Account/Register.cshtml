@@ -1,0 +1,20 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div style="width: 450px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); padding: 40px;">
+        <form asp-action="Register" method="post">
+            <input class="form-control mt-2" asp-for="Username" placeholder="Username" />
+            <span class="text-danger" asp-validation-for="Username"></span>
+
+            <input class="form-control mt-2" asp-for="Password" placeholder="Password" type="password" />
+            <span class="text-danger" asp-validation-for="Password"></span>
+
+            <a asp-action="Login" class="btn btn-link btn-sm mt-2">Login</a><br />
+
+            <button class="btn btn-primary btn-sm mt-2" type="submit">Register</button>
+        </form>
+    </div>
+</div>

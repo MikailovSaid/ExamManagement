@@ -28,8 +28,8 @@ namespace ExamManagement.Repositories
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
             return await db.QueryAsync<ExamStatistics>(
-                "SELECT * FROM ExamStatistics WHERE TRUNC(CalculatedAt) = TRUNC(:Date)",
-                new { Date = date });
+                "SELECT * FROM ExamStatistics WHERE TRUNC(CalculatedAt) = TRUNC(:TargetDate)",
+                new { TargetDate = date });
         }
     }
 }

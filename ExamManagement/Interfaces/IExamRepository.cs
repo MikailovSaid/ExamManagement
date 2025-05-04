@@ -4,6 +4,6 @@ namespace ExamManagement.Interfaces
 {
     public interface IExamRepository : IRepository<Exam>
     {
-        Task<Exam?> GetByCompositeKeyAsync(string subjectCode, int studentId, DateTime examDate);
+        Task<Exam?> GetByCompositeKeyAsync(int? examId, string subjectCode, int studentId, DateTime examDate);
     }
 }

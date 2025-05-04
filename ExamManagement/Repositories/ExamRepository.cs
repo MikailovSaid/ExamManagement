@@ -3,6 +3,8 @@ using ExamManagement.Interfaces;
 using Dapper;
 using ExamManagement.Data;
 using System.Data;
+using ExamManagement.Helpers;
+using Oracle.ManagedDataAccess.Client;
 
 namespace ExamManagement.Repositories
 {
@@ -18,55 +20,96 @@ namespace ExamManagement.Repositories
         public async Task<IEnumerable<Exam>> GetAllAsync()
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            string sql = @"
-                SELECT e.ExamId, e.SubjectCode, e.StudentId, e.ExamDate, e.Grade,
-                        s.ClassLevel
-                FROM Exams e
-                JOIN Students s ON e.StudentId = s.StudentId";
 
-            return await db.QueryAsync<Exam>(sql);
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_result", dbType: OracleDbType.RefCursor, direction: ParameterDirection.Output);
+
+            var result = await db.QueryAsync<Exam>(
+                "CRUD_EXAMS.GetAll",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
+
+            return result;
         }
 
         public async Task<Exam?> GetByIdAsync(object id)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            return await db.QueryFirstOrDefaultAsync<Exam>(
-                "SELECT * FROM Exams WHERE ExamId = :Id",
-                new { Id = id });
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_exam_id", id, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_result", dbType: OracleDbType.RefCursor, direction: ParameterDirection.Output);
+
+            var result = await db.QueryAsync<Exam>(
+                "CRUD_EXAMS.GetById",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
+
+            return result.FirstOrDefault();
         }
 
-        public async Task<Exam?> GetByCompositeKeyAsync(string subjectCode, int studentId, DateTime examDate)
+        public async Task<Exam?> GetByCompositeKeyAsync(int? examId, string subjectCode, int studentId, DateTime examDate)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            return await db.QueryFirstOrDefaultAsync<Exam>(
-                @"SELECT * FROM Exams 
-                  WHERE SubjectCode = :SubjectCode AND StudentId = :StudentId AND ExamDate = :ExamDate",
-                new { SubjectCode = subjectCode, StudentId = studentId, ExamDate = examDate });
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_exam_id", examId, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_subject_code", subjectCode, OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_student_id", studentId, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_exam_date", examDate.ToString("yyyy-MM-dd"), OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_result", dbType: OracleDbType.RefCursor, direction: ParameterDirection.Output);
+
+            var result = await db.QueryAsync<Exam>(
+                "CRUD_EXAMS.GetByCompositeKey",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
+
+            return result.FirstOrDefault();
         }
 
         public async Task AddAsync(Exam exam)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            string sql = @"
-                INSERT INTO Exams (SubjectCode, StudentId, ExamDate, Grade)
-                VALUES (:SubjectCode, :StudentId, :ExamDate, :Grade)";
-            await db.ExecuteAsync(sql, exam);
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_subject_code", exam.SubjectCode, OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_student_id", exam.StudentId, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_exam_date", exam.ExamDate, OracleDbType.Date, ParameterDirection.Input);
+            parameters.Add("p_grade", exam.Grade, OracleDbType.Int32, ParameterDirection.Input);
+
+            await db.ExecuteAsync(
+                "CRUD_EXAMS.AddExam",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
         }
 
         public async Task UpdateAsync(Exam exam)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            string sql = @"
-                UPDATE Exams
-                SET Grade = :Grade
-                WHERE ExamId = :ExamId";
-            await db.ExecuteAsync(sql, exam);
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_subject_code", exam.SubjectCode, OracleDbType.Varchar2, ParameterDirection.Input);
+            parameters.Add("p_student_id", exam.StudentId, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_exam_id", exam.ExamId, OracleDbType.Int32, ParameterDirection.Input);
+            parameters.Add("p_grade", exam.Grade, OracleDbType.Int32, ParameterDirection.Input);
+
+            await db.ExecuteAsync(
+                "CRUD_EXAMS.UpdateExam",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
         }
 
         public async Task DeleteAsync(object id)
         {
             using IDbConnection db = _connectionFactory.CreateConnection();
-            await db.ExecuteAsync("DELETE FROM Exams WHERE ExamId = :Id", new { Id = id });
+
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("p_exam_id", id, OracleDbType.Int32, ParameterDirection.Input);
+
+            await db.ExecuteAsync(
+                "CRUD_EXAMS.DeleteExam",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
         }
     }
 }

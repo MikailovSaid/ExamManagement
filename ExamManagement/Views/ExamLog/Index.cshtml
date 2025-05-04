@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ExamAuditLog>
+<div class="d-flex justify-content-between">
+    <h4>Exam Audit Logs</h4>
+</div>
+<form asp-action="Index">
+    <div class="row">
+        <div class="col-3">
+            <select name="examId" class="form-select mt-2" asp-items="ViewBag.ExamId">
+                <option>All</option>
+            </select>
+        </div>
+        <div class="col-1">
+            <button type="submit" class="btn btn-primary mt-2">Search</button>
+        </div>
+    </div>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">LogId</th>
+            <th scope="col">Exam</th>
+            <th scope="col">Old Grade</th>
+            <th scope="col">New Grade</th>
+            <th scope="col">Changed By</th>
+            <th scope="col">Changed At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.LogId</th>
+                <td>@item.ExamId</td>
+                <td>@item.OldGrade</td>
+                <td>@item.NewGrade</td>
+                <td>@item.ChangedBy</td>
+                <td>@item.ChangedAt.ToString("dd-MM-yyyy HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>

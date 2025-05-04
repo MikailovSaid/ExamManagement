@@ -35,6 +35,7 @@ namespace ExamManagement.Services.Jobs
             var examRepo = scope.ServiceProvider.GetRequiredService<IExamRepository>();
             var statRepo = scope.ServiceProvider.GetRequiredService<IExamStatisticsRepository>();
             var logRepo = scope.ServiceProvider.GetRequiredService<ILogRepository>();
+            var subjectRepo = scope.ServiceProvider.GetRequiredService<ISubjectRepository>();
 
             try
             {
@@ -56,7 +57,7 @@ namespace ExamManagement.Services.Jobs
                     var stat = new ExamStatistics
                     {
                         SubjectCode = group.Key.SubjectCode,
-                        ClassLevel = group.Key.ClassLevel,
+                        ClassLevel = (await subjectRepo.GetByIdAsync(group.Key.SubjectCode))!.ClassLevel,
                         AverageGrade = grades.Average(),
                         MaxGrade = grades.Max(),
                         MinGrade = grades.Min(),

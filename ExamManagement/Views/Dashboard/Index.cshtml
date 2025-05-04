@@ -1,5 +1,53 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<ExamStatistics>
+<div class="d-flex justify-content-between">
+    <h4>Exam Audit Logs</h4>
+</div>
+<form asp-action="Index">
+    <div class="row">
+        <div class="col-3">
+            <input type="date" name="date" class="form-control" />
+        </div>
+        <div class="col-1">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Subject Code</th>
+            <th scope="col">Class Level</th>
+            <th scope="col">Minimum Grade</th>
+            <th scope="col">Maximum Grade</th>
+            <th scope="col">Average Grade</th>
+            <th scope="col">Exam Count</th>
+            <th scope="col">Calculated At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.StatId</th>
+                <td>@item.SubjectCode</td>
+                <td>@item.ClassLevel</td>
+                <td>@item.MinGrade</td>
+                <td>@item.MaxGrade</td>
+                <td>@item.AverageGrade</td>
+                <td>@item.ExamCount</td>
+                <td>@item.CalculatedAt.ToString("dd-MM-yyyy HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Reports</h4>
+<div class="d-flex">
+    <form asp-action="ExcelExport" method="post">
+        <button type="submit" class="btn btn-success">Export to Excel</button>
+    </form>
+    <form asp-action="PdfExport" method="post">
+        <button type="submit" class="btn btn-danger ms-2">Export to PDF</button>
+    </form>
+</div>

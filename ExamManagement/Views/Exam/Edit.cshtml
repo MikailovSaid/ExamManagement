@@ -1,0 +1,22 @@
+﻿@model Exam
+
+<h2>Edit Exam</h2>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ExamId" />
+    <input class="form-control mt-2" asp-for="ExamDate" placeholder="Exam Date" />
+    <span class="text-danger" asp-validation-for="ExamDate"></span>
+
+    <input class="form-control mt-2" asp-for="Grade" placeholder="Grade" />
+    <span class="text-danger" asp-validation-for="Grade"></span>
+
+    <select asp-for="SubjectCode" class="form-select mt-2" asp-items="ViewBag.SubjectCode"></select>
+    <span class="text-danger" asp-validation-for="SubjectCode"></span>
+
+    <select asp-for="StudentId" class="form-select mt-2" asp-items="ViewBag.StudentId"></select>
+    <span class="text-danger" asp-validation-for="StudentId"></span>
+
+    <div>
+        <button class="btn btn-primary btn-sm mt-2" type="submit">Save</button>
+        <a class="btn btn-secondary btn-sm mt-2" asp-action="Index">Cancel</a>
+    </div>
+</form>

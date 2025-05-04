@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Exam>
+@{
+    int index = 1;
+}
+<div class="d-flex justify-content-between">
+    <h4>Exams</h4>
+    <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Subject Code</th>
+            <th scope="col">Subject Name</th>
+            <th scope="col">Student</th>
+            <th scope="col">Date</th>
+            <th scope="col">Grade</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@item.SubjectCode</td>
+                <td>@item.SubjectName</td>
+                <td>@(item.StudentName + " " + item.StudentSurname)</td>
+                <td>@item.ExamDate.ToString("dd-MM-yyyy HH:mm")</td>
+                <td>@item.Grade</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.ExamId">Edit</a> |
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.ExamId">Delete</a>
+                </td>
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>

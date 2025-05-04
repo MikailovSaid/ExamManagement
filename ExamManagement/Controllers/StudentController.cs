@@ -1,9 +1,11 @@
 ﻿using ExamManagement.Entities;
+using ExamManagement.Filters;
 using ExamManagement.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExamManagement.Controllers
 {
+    [SessionAuthorize]
     public class StudentController : Controller
     {
         private readonly IStudentRepository _studentRepository;

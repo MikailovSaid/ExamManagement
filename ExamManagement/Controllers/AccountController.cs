@@ -27,7 +27,7 @@ namespace ExamManagement.Controllers
             }
 
             HttpContext.Session.SetString("Username", user.Username);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         public IActionResult Register() => View();

@@ -1,0 +1,8 @@
+﻿@model Exam
+
+<h2>Are you sure to delete exam with ID: @Model.ExamId?</h2>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ExamId" name="code" />
+    <button class="btn btn-primary btn-sm mt-2" type="submit">Delete</button>
+    <a class="btn btn-secondary btn-sm mt-2" asp-action="Index">Cancel</a>
+</form>

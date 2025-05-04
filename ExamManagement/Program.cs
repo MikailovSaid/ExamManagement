@@ -4,7 +4,12 @@ using ExamManagement.Repositories;
 using ExamManagement.Services.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSession();
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromMinutes(60);
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
+});
 
 builder.Services.AddRazorPages();
 builder.Services.AddHostedService<DailyStatsJob>();
